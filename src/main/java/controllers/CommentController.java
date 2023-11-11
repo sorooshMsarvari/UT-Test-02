@@ -15,11 +15,12 @@ import java.util.Map;
 @RestController
 public class CommentController {
 
-    private Baloot baloot = Baloot.getInstance();
+    private Baloot baloot;
 
     public void setBaloot(Baloot baloot) {
         this.baloot = baloot;
     }
+
     @PostMapping(value = "/comment/{id}/like")
     public ResponseEntity<String> likeComment(@PathVariable String id, @RequestBody Map<String, String> input) {
         int commentId = Integer.parseInt(id);
