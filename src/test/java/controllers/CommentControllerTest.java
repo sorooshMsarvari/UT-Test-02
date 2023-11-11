@@ -27,7 +27,7 @@ class CommentControllerTest {
     @Test
     void likeCommentSuccessfully() throws NotExistentComment {
         String username = "folan";
-        Map input = new HashMap();
+        Map<String, String> input = new HashMap<>();
         input.put("username", username);
         when(baloot.getCommentById(1)).thenReturn(new Comment());
         assertThat(commentController.likeComment("1", input).getStatusCode()).isEqualTo(HttpStatus.OK);

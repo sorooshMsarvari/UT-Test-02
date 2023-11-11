@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 public class CommoditiesController {
 
-    private Baloot baloot = Baloot.getInstance();
+    private Baloot baloot;
 
     public void setBaloot(Baloot baloot) {
         this.baloot = baloot;
@@ -61,10 +61,11 @@ public class CommoditiesController {
         try {
             user = baloot.getUserById(username);
         } catch (NotExistentUser ignored) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
         Comment comment = new Comment(commentId, user.getEmail(), user.getUsername(), Integer.parseInt(id), commentText);
         baloot.addComment(comment);
+
 
         return new ResponseEntity<>("comment added successfully!", HttpStatus.OK);
     }

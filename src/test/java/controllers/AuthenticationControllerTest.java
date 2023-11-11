@@ -30,7 +30,7 @@ class AuthenticationControllerTest {
     void loginSuccessfully(){
         String username = "folan";
         String password = "bahman";
-        Map input = new HashMap();
+        var input = new HashMap<String, String>();
         input.put("username", username);
         input.put("password", password);
         assertThat(authenticationController.login(input).getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -39,7 +39,7 @@ class AuthenticationControllerTest {
     void loginFailedBecauseUnauthorized() throws NotExistentUser, IncorrectPassword {
         String username = "folan";
         String password = "bahman";
-        Map input = new HashMap();
+        var input = new HashMap<String, String>();
         input.put("username", username);
         input.put("password", password);
         doThrow(IncorrectPassword.class).when(baloot).login(username, password);
@@ -49,7 +49,7 @@ class AuthenticationControllerTest {
     void loginFailedBecauseNotExistingUser() throws NotExistentUser, IncorrectPassword {
         String username = "folan";
         String password = "bahman";
-        Map input = new HashMap();
+        var input = new HashMap<String, String>();
         input.put("username", username);
         input.put("password", password);
         doThrow(NotExistentUser.class).when(baloot).login(username, password);
@@ -57,7 +57,7 @@ class AuthenticationControllerTest {
     }
     @Test
     void signupSuccessfully(){
-        Map input = new HashMap();
+        var input = new HashMap<String, String>();
         input.put("username", "folan");
         input.put("password", "bahman");
         input.put("email", "folani@gmail.com");
@@ -67,7 +67,7 @@ class AuthenticationControllerTest {
     }
     @Test
     void signupFailedBecauseBadRequest() throws UsernameAlreadyTaken {
-        Map input = new HashMap();
+        var input = new HashMap<String, String>();
         input.put("username", "folan");
         input.put("password", "bahman");
         input.put("email", "folani@gmail.com");
