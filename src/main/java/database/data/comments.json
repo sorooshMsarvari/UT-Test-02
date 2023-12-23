@@ -9,7 +9,7 @@
   {
     "userEmail": "ali@gmail.com",
     "username": "ali",
-    "commodityId": "2",
+    "commodityId": 2,
     "text": "not bad",
     "date": "2023-02-01"
   }
