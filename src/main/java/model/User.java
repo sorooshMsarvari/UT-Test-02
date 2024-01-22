@@ -1,11 +1,15 @@
 package model;
 
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import exceptions.CommodityIsNotInBuyList;
 import exceptions.InsufficientCredit;
 import exceptions.InvalidCreditRange;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.testng.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +37,10 @@ public class User {
         this.address = address;
     }
 
+    public User(int credit) {
+        this.credit = credit;
+    }
+
     public void addCredit(float amount) throws InvalidCreditRange {
         if (amount < 0)
             throw new InvalidCreditRange();
@@ -56,6 +64,15 @@ public class User {
             this.buyList.put(id, 1);
     }
 
+    public void addBuyItemWhitQuantity(Commodity commodity, int quantity) {
+        String id = commodity.getId();
+        if (this.buyList.containsKey(id)) {
+            int existingQuantity = this.buyList.get(id);
+            this.buyList.put(id, existingQuantity + quantity);
+        } else
+            this.buyList.put(id, quantity);
+    }
+
     public void addPurchasedItem(String id, int quantity) {
         if (this.purchasedList.containsKey(id)) {
             int existingQuantity = this.purchasedList.get(id);
@@ -76,4 +93,56 @@ public class User {
             throw new CommodityIsNotInBuyList();
     }
 
+    public void removeItemFromBuyListWhitQuantity(Commodity commodity, int quantity) throws CommodityIsNotInBuyList {
+        String id = commodity.getId();
+        if (this.buyList.containsKey(id)) {
+            int existingQuantity = this.buyList.get(id);
+            if (existingQuantity <= quantity)
+                this.buyList.remove(commodity.getId());
+            else
+                this.buyList.put(id, existingQuantity - quantity);
+        } else
+            throw new CommodityIsNotInBuyList();
+    }
+
+
+    public class UserCreditManagementStepsadd {
+
+        /*
+        Feature: User Credit Management
+
+          Scenario: Add credit to the user's account
+            Given a user with a credit of 100
+            When the user adds 50 credit
+            Then the user's credit should be 150
+
+          Scenario: Add negative credit to the user's account
+            Given a user with a credit of 100
+            When the user adds -50 credit
+            Then an InvalidCreditRange exception should be thrown
+         */
+        private User user;
+
+        @Given("a user with a credit of {int}")
+        public void givenAUserWithCredit(int initialCredit) {
+            user = new User(initialCredit);
+        }
+
+        @When("the user adds {int} credit")
+        public void whenTheUserAddsCredit(int creditToAdd) {
+            try {
+                user.addCredit(creditToAdd);
+            } catch (InvalidCreditRange e) {
+            }
+        }
+
+        @Then("the user's credit should be {int}")
+        public void thenTheUsersCreditShouldBe(int expectedCredit) {
+            Assert.assertEquals(expectedCredit, user.getCredit());
+        }
+
+        @Then("an InvalidCreditRange exception should be thrown")
+        public void thenAnInvalidCreditRangeExceptionShouldBeThrown() {
+        }
+    }
 }
